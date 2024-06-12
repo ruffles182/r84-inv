@@ -36,7 +36,8 @@ class ProductResource extends Resource
                     ])
                     ->maxLength(255)
                     ->default(null)
-                    ->required(),
+                    ->required()
+		    ->label('Nombre'),
                 TextInput::make('barcode')
                     ->maxLength(255)
                     ->default(null)
@@ -47,7 +48,8 @@ class ProductResource extends Resource
                         'lg' => 2,
                         'xl' => 2,
                         '2xl' => 2,
-                    ]),
+                    ])
+		    ->label('Código'),
                 TextArea::make('description')
                     ->default(null)
                     ->columnSpan([
@@ -57,7 +59,8 @@ class ProductResource extends Resource
                         'lg' => 1,
                         'xl' => 1,
                         '2xl' => 1,
-                    ]),
+                    ])
+		    ->label('Descripción'),
                 
                 
             ]);
@@ -66,16 +69,21 @@ class ProductResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+    	    ->defaultPaginationPageOption(50)
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
+                    ->searchable()
+		    ->label('Producto'),
                 Tables\Columns\TextColumn::make('barcode')
-                    ->searchable(),
+                    ->searchable()
+		    ->label('Código'),
                 Tables\Columns\TextColumn::make('description')
-                    ->searchable(),
+                    ->searchable()
+		    ->label('Descripción'),
                 Tables\Columns\TextColumn::make('quantity')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+		    ->label('Stock'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -95,6 +103,7 @@ class ProductResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+	    
             ]);
     }
 
@@ -120,5 +129,9 @@ class ProductResource extends Resource
     }
     public static function getNavigationsort(): int {
         return 1;
+    }
+    public static function getLabel(): string
+    {
+        return 'Productos';
     }
 }

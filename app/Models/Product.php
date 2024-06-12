@@ -15,6 +15,4 @@ class Product extends Model
     public function movements() {
         return $this->hasMany(Movement::class);
     }
-
-    
 }

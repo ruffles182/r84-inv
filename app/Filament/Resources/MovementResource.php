@@ -41,7 +41,8 @@ class MovementResource extends Resource
                     ->preload()
                     ->searchable()
                     ->relationship('product','name')
-                    ->required(),
+                    ->required()
+		    ->label('Producto'),
                 TextInput::make('stock')
                     ->label('Cantidad')
                     ->required()
@@ -50,24 +51,31 @@ class MovementResource extends Resource
                 TextInput::make('person')
                     ->required()
                     ->maxLength(255)
-                    ->default(null),
+                    ->default(null)
+		    ->label('Persona'),
                 Textarea::make('notes')
-                    ->columnSpanFull(),
+                    ->columnSpanFull()
+		    ->label('Notas'),
             ]);
     }
 
     public static function table(Table $table): Table
     {
         return $table
+	    ->defaultPaginationPageOption(50)
             ->columns([
-                Tables\Columns\TextColumn::make('type'),
+                Tables\Columns\TextColumn::make('type')
+		    ->label('Tipo'),
                 Tables\Columns\TextColumn::make('product.name')
-                    ->sortable(),
+                    ->sortable()
+		    ->label('Producto'),
                 Tables\Columns\TextColumn::make('stock')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+		    ->label('Cantidad'),
                 Tables\Columns\TextColumn::make('person')
-                    ->searchable(),
+                    ->searchable()
+		    ->label('Persona'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -78,7 +86,13 @@ class MovementResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('type')
+                ->options([
+                    'entrada' => 'Entrada',
+                    'salida' => 'Salida',
+                    'ajuste' => 'Ajuste',
+                ])
+                ->label('Tipo')
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -111,5 +125,9 @@ class MovementResource extends Resource
     }
     public static function getNavigationsort(): int {
         return 2;
+    }
+    public static function getLabel(): string
+    {
+        return 'Movimientos';
     }
 }
